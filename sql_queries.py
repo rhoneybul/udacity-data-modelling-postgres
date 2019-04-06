@@ -10,8 +10,8 @@ time_table_drop = "DROP TABLE IF EXISTS time"
 
 songplay_table_create = ("""
 CREATE TABLE IF NOT EXISTS songplays(
-    songplay_id INT NOT NULL,
-    start_time INT,
+    songplay_id SERIAL,
+    start_time TIMESTAMP,
     user_id INT,
     song_id INT,
     artist_id INT,
@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS users(
 
 song_table_create = ("""
 CREATE TABLE IF NOT EXISTS songs(
-    song_id INT NOT NULL,
+    song_id VARCHAR NOT NULL,
     title VARCHAR,
-    artist_id INT,
+    artist_id VARCHAR,
     year INT,
     duration FLOAT,
     PRIMARY KEY (song_id)
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS songs(
 
 artist_table_create = ("""
 CREATE TABLE IF NOT EXISTS artists(
-    artist_id INT NOT NULL,
+    artist_id VARCHAR NOT NULL,
     name VARCHAR,
     location VARCHAR,
     latitude FLOAT,
@@ -57,13 +57,13 @@ CREATE TABLE IF NOT EXISTS artists(
 
 time_table_create = ("""
 CREATE TABLE IF NOT EXISTS time(
-    start_time INT,
+    start_time TIMESTAMP,
     hour INT,
     day INT,
     week INT,
     month INT, 
     year INT,
-    weekday VARCHAR,
+    weekday INT,
     PRIMARY KEY (start_time)
 )
 """)
@@ -71,24 +71,41 @@ CREATE TABLE IF NOT EXISTS time(
 # INSERT RECORDS
 
 songplay_table_insert = ("""
+insert into songplays (start_time, user_id, song_id, artist_id, session_id, location, user_agent)
+    values (%s, %s, %s, %s, %s, %s, %s)
 """)
 
 user_table_insert = ("""
+insert into users (user_id, first_name, last_name, gender, level)
+    values (%s, %s, %s, %s, %s)
+    on conflict (user_id) do nothing
 """)
 
 song_table_insert = ("""
+insert into songs (song_id, title, artist_id, year, duration) 
+       values (%s, %s, %s, %s, %s)
+       on conflict (song_id) do nothing
 """)
 
 artist_table_insert = ("""
+insert into artists(artist_id, name, location, latitude, longitude)
+    values (%s, %s, %s, %s, %s)
+    on conflict (artist_id) do nothing
 """)
 
 
 time_table_insert = ("""
+insert into time(start_time, hour, day, week, month, year)
+    values (%s, %s, %s, %s, %s, %s)
+    on conflict (start_time) do nothing
 """)
 
 # FIND SONGS
 
 song_select = ("""
+select song_id, artists.artist_id from songs 
+    join artists on songs.artist_id=artists.artist_id 
+    where songs.title=%s and artists.name=%s and songs.duration=%s
 """)
 
 # QUERY LISTS
