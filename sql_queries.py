@@ -1,3 +1,8 @@
+'''
+This module contains the sql queries required to create the relevant tables
+as well as inserting datapoints and querying datapoints.
+'''
+
 # DROP TABLES
 
 songplay_table_drop = "DROP TABLE IF EXISTS songplays"
@@ -71,7 +76,8 @@ CREATE TABLE IF NOT EXISTS time(
 # INSERT RECORDS
 
 songplay_table_insert = ("""
-insert into songplays (start_time, user_id, song_id, artist_id, session_id, location, user_agent)
+insert into songplays 
+    (start_time, user_id, song_id, artist_id, session_id, location, user_agent)
     values (%s, %s, %s, %s, %s, %s, %s)
 """)
 
@@ -110,5 +116,14 @@ select song_id, artists.artist_id from songs
 
 # QUERY LISTS
 
-create_table_queries = [songplay_table_create, user_table_create, song_table_create, artist_table_create, time_table_create]
-drop_table_queries = [songplay_table_drop, user_table_drop, song_table_drop, artist_table_drop, time_table_drop]
+create_table_queries = [songplay_table_create, 
+                        user_table_create, 
+                        song_table_create,
+                        artist_table_create, 
+                        time_table_create]
+drop_table_queries = [songplay_table_drop, 
+                      user_table_drop,
+                      song_table_drop,
+                      artist_table_drop,
+                      time_table_drop]
+                      
